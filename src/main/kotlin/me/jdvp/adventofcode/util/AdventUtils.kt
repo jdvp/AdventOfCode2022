@@ -1,0 +1,28 @@
+package me.jdvp.adventofcode.util
+
+import java.io.File
+
+fun getResourceAsText(fileName: String): String {
+    return File("src/main/resources/$fileName").readText()
+}
+
+/**
+ * Overly complicated way of printing results as a side effect.
+ *
+ * If called from "Day1" class "part1" method, will indicate as
+ * such by starting with "Day1 part1"
+ */
+inline fun <reified T> T.printResults(): T = ::apply {
+    val stackTrace = Thread.currentThread().stackTrace
+    //Start with 1 because getStackTrace itself is 0
+    var enclosingStackTraceElement: StackTraceElement? = null
+    for(index in 1 until stackTrace.size) {
+        enclosingStackTraceElement = stackTrace.getOrNull(index)
+        if (enclosingStackTraceElement?.methodName != null && enclosingStackTraceElement.methodName != "invoke") {
+            break
+        }
+    }
+    val enclosingClass = enclosingStackTraceElement?.className?.split(".")?.lastOrNull()
+    val enclosingMethod = enclosingStackTraceElement?.methodName
+    println("$enclosingClass $enclosingMethod result is $this")
+}
