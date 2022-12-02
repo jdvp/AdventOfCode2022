@@ -18,9 +18,9 @@ object Day2 {
 
     private fun String.toHandScore(): Int {
         return when(this) {
-            "A", "X" -> 1
-            "B", "Y" -> 2
-            else -> 3
+            "A", "X" -> 0
+            "B", "Y" -> 1
+            else -> 2
         }
     }
 
@@ -34,21 +34,23 @@ object Day2 {
     //p - r = 1
     //s - p = 1
 
-    //r, p, s 1, 2, 3
+    //r, p, s, 0, 1, 2
     private fun Pair<Int, Int>.scoreMatch(): Int {
-        return second + when(second - first) {
+        return (second + 1) + when(second - first) {
             -1, 2 -> 0
             1, -2 -> 6
             else -> 3
         }
     }
 
-    //1 -> lose, 2 -> draw, 3 -> win
+    //0 -> lose, 1 -> draw, 2 -> win
     private fun Pair<Int, Int>.convertWinConditionToHand(): Pair<Int, Int> {
         return first to when(second) {
-            2 -> first
-            1 -> ((first + 1) % 3) + 1
-            else -> (first % 3) + 1
+            1 -> first
+            2 -> Math.floorMod(first + 1, 3)
+            else -> Math.floorMod(first - 1, 3)
+        }.apply {
+            println("first: $first, second: $second, result: $this")
         }
     }
 
