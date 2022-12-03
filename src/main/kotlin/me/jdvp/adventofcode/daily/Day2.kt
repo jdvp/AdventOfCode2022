@@ -2,6 +2,8 @@ package me.jdvp.adventofcode.daily
 
 import me.jdvp.adventofcode.util.getResourceAsText
 import me.jdvp.adventofcode.util.printResults
+import kotlin.math.abs
+import kotlin.math.min
 
 /**
  * This code would be awful to have IRL but is for fun so tried to code golf it a bit which ended up with
@@ -10,18 +12,20 @@ import me.jdvp.adventofcode.util.printResults
 object Day2 {
     private fun readInput(): List<Pair<Int, Int>> {
         return getResourceAsText("Day2Input")
-            .lines().map {
-                val pair = it.split(" ")
-                return@map pair.first().toHandScore() to pair.last().toHandScore()
-            }
+            .lines()
+            .asSequence()
+            .map(String::toCharArray)
+            .flatMap(CharArray::toList)
+            .filter(Char::isLetter)
+            .map { it.toHandScore() }
+            .chunked(2)
+            .map {
+                it.first() to it.last()
+            }.toList()
     }
 
-    private fun String.toHandScore(): Int {
-        return when(this) {
-            "A", "X" -> 0
-            "B", "Y" -> 1
-            else -> 2
-        }
+    private fun Char.toHandScore(): Int {
+        return min(abs('A'.code - code), abs('X'.code - code))
     }
 
     private fun Pair<Int, Int>.scoreMatch(): Int {
@@ -38,7 +42,9 @@ object Day2 {
     }
 
     fun part1(): Int {
-        return readInput().sumOf { it.scoreMatch() }.printResults()
+        return readInput().sumOf {
+            it.scoreMatch()
+        }.printResults()
     }
 
     fun part2(): Int {
