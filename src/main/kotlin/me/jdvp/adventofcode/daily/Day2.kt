@@ -32,7 +32,7 @@ object Day2 {
     private fun Pair<Int, Int>.scoreMatch(): Int {
         //stumbled into this one, not totally sure why it works mathematically, sorry :(
         //the +4 is actually + 1 for 0-based indexing of the score and then + 3 for the second term with the floorMods
-        return second + 4 + ((((first - second) % 3) * 2 + (-1 * sign((first - second).toDouble()).toInt() * 3)) * 3)
+        return second + 4 + ((((first - second) % 3) * 2 + (-1 * (first - second).sign * 3)) * 3)
     }
 
     //0 -> lose, 1 -> draw, 2 -> win
