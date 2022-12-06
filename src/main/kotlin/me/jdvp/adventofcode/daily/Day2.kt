@@ -11,6 +11,10 @@ import kotlin.math.sign
  * code that is pretty hard for a human to read straight away
  */
 object Day2 {
+    private enum class Score(val value: Int) {
+        DRAW(3), LOSE(0), WIN(6)
+    }
+
     private fun readInput(): List<Pair<Int, Int>> {
         return getResourceAsText("Day2Input")
             .lines()
@@ -30,14 +34,12 @@ object Day2 {
     }
 
     private fun Pair<Int, Int>.scoreMatch(): Int {
-        //stumbled into this one, not totally sure why it works mathematically, sorry :(
-        //the +4 is actually + 1 for 0-based indexing of the score and then + 3 for the second term with the floorMods
-        return second + 4 + ((((first - second) % 3) * 2 + (-1 * (first - second).sign * 3)) * 3)
+        return second + 1 + Score.values()[(first - second + 3) % 3].value
     }
 
     //0 -> lose, 1 -> draw, 2 -> win
     private fun Pair<Int, Int>.convertWinConditionToHand(): Pair<Int, Int> {
-        //lol can you imagine getting here and wondering what 'first + second -1' means in production code
+        //lol can you imagine getting here and wondering what 'first + second - 1' means in production code
         //BUT this works bc left shift in the array is a losing hand shape and right shift is a winning hand shape
         return first to Math.floorMod(first + second - 1, 3)
     }
