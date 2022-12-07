@@ -4,7 +4,6 @@ import me.jdvp.adventofcode.util.getResourceAsText
 import me.jdvp.adventofcode.util.printResults
 import kotlin.math.abs
 import kotlin.math.min
-import kotlin.math.sign
 
 /**
  * This code would be awful to have IRL but is for fun so tried to code golf it a bit which ended up with
