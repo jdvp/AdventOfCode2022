@@ -22,9 +22,9 @@ object Day7 {
                 return if (name == PARENT_DIRECTORY) {
                     parent
                 } else {
-                    files.firstOrNull {
-                        it is Directory && it.name == name
-                    } as? Directory
+                    files.filterIsInstance<Directory>().firstOrNull {
+                        it.name == name
+                    }
                 }
             }
 
@@ -78,7 +78,7 @@ object Day7 {
                 ))
             }
         }
-        return root!!
+        return root ?: FileSystemItem.Directory(name = "/")
     }
 
     private fun FileSystemItem.Directory.getDirectorySizes(): List<Int> {
