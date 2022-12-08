@@ -18,14 +18,15 @@ object Day7 {
             val parent: Directory? = null
         ): FileSystemItem {
             fun add(fileSystemItem: FileSystemItem) = files.add(fileSystemItem)
-            fun getSubDirectory(name: String): Directory? {
+
+            fun getNavigationDirectory(name: String): Directory {
                 return if (name == PARENT_DIRECTORY) {
                     parent
                 } else {
                     files.filterIsInstance<Directory>().firstOrNull {
                         it.name == name
                     }
-                }
+                } ?: this
             }
 
             fun getSize(): Int {
@@ -61,7 +62,7 @@ object Day7 {
                         root = FileSystemItem.Directory(dirName)
                         currentDirectory = root
                     } else {
-                        currentDirectory = currentDirectory?.getSubDirectory(dirName)
+                        currentDirectory = currentDirectory?.getNavigationDirectory(dirName)
                     }
                 }
             } else if (it.startsWith(OUTPUT_DIRECTORY)) {
