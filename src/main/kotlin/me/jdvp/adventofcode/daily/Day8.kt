@@ -23,7 +23,7 @@ object Day8 {
             (x + 1..grid.lastIndex).map { grid[it][y] }
         }),
         LEFT({ grid, x, y ->
-            (y -1 downTo 0).map { grid[x][it] }
+            (y - 1 downTo 0).map { grid[x][it] }
         }),
         RIGHT({ grid, x, y ->
             (y + 1..grid[x].lastIndex).map { grid[x][it] }
@@ -32,7 +32,7 @@ object Day8 {
 
     private fun List<List<Int>>.toCoordinates(): List<Pair<Int, Int>> {
         return (0..lastIndex).flatMap { y ->
-            (0..this[y].lastIndex).map {x ->
+            (0..this[y].lastIndex).map { x ->
                 x to y
             }
         }
