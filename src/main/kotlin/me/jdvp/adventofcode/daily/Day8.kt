@@ -7,7 +7,6 @@ object Day8 {
     private fun readInput(): List<List<Int>> {
         return getResourceAsText("Day8Input")
             .lines()
-            .map(String::toCharArray)
             .map {
                 it.map(Char::digitToInt)
             }
@@ -72,9 +71,7 @@ object Day8 {
                     }
                     return@fold acc + 1
                 }
-        }.reduce { acc, i ->
-            acc * i
-        }
+        }.reduce(Int::times)
     }
 
     fun part1(): Int {
