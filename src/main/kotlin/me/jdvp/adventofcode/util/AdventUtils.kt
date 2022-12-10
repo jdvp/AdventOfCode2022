@@ -12,7 +12,9 @@ fun getResourceAsText(fileName: String): String {
  * If called from "Day1" class "part1" method, will indicate as
  * such by starting with "Day1 part1"
  */
-inline fun <reified T> T.printResults(): T = ::apply {
+inline fun <reified T> T.printResults(
+    startOnNewLine: Boolean = false
+): T = ::apply {
     val stackTrace = Thread.currentThread().stackTrace
     //Start with 1 because getStackTrace itself is 0
     var enclosingStackTraceElement: StackTraceElement? = null
@@ -24,5 +26,6 @@ inline fun <reified T> T.printResults(): T = ::apply {
     }
     val enclosingClass = enclosingStackTraceElement?.className?.split(".")?.lastOrNull()
     val enclosingMethod = enclosingStackTraceElement?.methodName
-    println("$enclosingClass $enclosingMethod result is $this")
+    val newLineChar = if (startOnNewLine) "\n" else ""
+    println("$enclosingClass $enclosingMethod result is $newLineChar$this")
 }
