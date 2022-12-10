@@ -26,8 +26,10 @@ object Day9 {
         return abs(this.first - other.first) <= 1 && abs(this.second - other.second) <= 1
     }
 
+    private fun Int.moveTowards(other: Int) = this + (other - this).sign
+
     private fun Pair<Int, Int>.moveTowards(other: Pair<Int, Int>): Pair<Int, Int> {
-        return this.first + (other.first - this.first).sign to this.second + (other.second - this.second).sign
+        return first.moveTowards(other.first) to second.moveTowards(other.second)
     }
 
     enum class Direction(val applyMovement: (Pair<Int, Int>) -> Pair<Int, Int>) {
