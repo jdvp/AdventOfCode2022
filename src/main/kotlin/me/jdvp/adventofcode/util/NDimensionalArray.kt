@@ -2,7 +2,6 @@
 
 package me.jdvp.adventofcode.util
 
-import java.lang.IllegalArgumentException
 import java.util.*
 
 class NDimensionalArray<T: Any>(
