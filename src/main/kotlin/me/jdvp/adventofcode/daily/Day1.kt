@@ -1,11 +1,11 @@
 package me.jdvp.adventofcode.daily
 
-import me.jdvp.adventofcode.util.getResourceAsText
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.printResults
 
-object Day1 {
+object Day1: Daily(year = 2022, day = 1) {
     private fun getElfCalories(): Sequence<Long> {
-        return getResourceAsText("Day1Input").splitToSequence(
+        return getInputText().splitToSequence(
             "\r\n\r\n", "\n\n", "\r\r"
         ).map {
             it.lineSequence().sumOf(String::toLong)

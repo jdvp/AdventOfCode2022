@@ -1,17 +1,17 @@
 package me.jdvp.adventofcode.daily
 
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.NDimensionalArray
-import me.jdvp.adventofcode.util.getResourceAsText
 import me.jdvp.adventofcode.util.printResults
 
-object Day12 {
+object Day12: Daily(year = 2022, day = 12) {
     private fun readInput(): NDimensionalArray<Char> {
         val grid = NDimensionalArray<Char>(
             dimensions = 2,
             defaultValueCalculation = { null }
         )
 
-        getResourceAsText("Day12Input")
+        getInputText()
             .lines()
             .mapIndexed { x, i ->
                 i.toCharArray().mapIndexed { y, c ->

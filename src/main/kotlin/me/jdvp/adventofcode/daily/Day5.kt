@@ -1,12 +1,12 @@
 package me.jdvp.adventofcode.daily
 
-import me.jdvp.adventofcode.util.getResourceAsText
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.printResults
 import java.util.*
 
-object Day5 {
+object Day5: Daily(year = 2022, day = 5) {
     private fun readInput(): List<String> {
-        return getResourceAsText("Day5Input").lines()
+        return getInputText().lines()
     }
 
     private data class CraneMovement(

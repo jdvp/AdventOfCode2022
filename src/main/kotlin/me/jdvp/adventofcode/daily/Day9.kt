@@ -1,13 +1,13 @@
 package me.jdvp.adventofcode.daily
 
-import me.jdvp.adventofcode.util.getResourceAsText
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.printResults
 import kotlin.math.abs
 import kotlin.math.sign
 
-object Day9 {
+object Day9: Daily(year = 2022, day = 9) {
     private fun readInput(): List<Pair<Direction, Int>> {
-        return getResourceAsText("Day9Input")
+        return getInputText()
             .lines()
             .map {
                 val (a, b) = it.split(" ")

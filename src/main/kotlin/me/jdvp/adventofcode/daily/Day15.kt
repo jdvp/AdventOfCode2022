@@ -1,12 +1,12 @@
 package me.jdvp.adventofcode.daily
 
-import me.jdvp.adventofcode.util.getResourceAsText
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.printResults
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-object Day15 {
+object Day15: Daily(year = 2022, day = 15) {
     private const val LOWER_LIMIT = 0
     private const val UPPER_LIMIT = 4_000_000
 
@@ -20,7 +20,7 @@ object Day15 {
     }
 
     private fun readInput(): List<Sensor> {
-        return getResourceAsText("Day15Input")
+        return getInputText()
             .lines()
             .map { line ->
                 val (a, b, c, d) = line.split(" ", ",", ":").filter { part ->

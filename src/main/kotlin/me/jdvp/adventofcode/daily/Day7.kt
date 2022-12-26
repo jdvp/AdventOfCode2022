@@ -1,9 +1,9 @@
 package me.jdvp.adventofcode.daily
 
-import me.jdvp.adventofcode.util.getResourceAsText
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.printResults
 
-object Day7 {
+object Day7: Daily(year = 2022, day = 7) {
     private const val COMMAND_CHARACTER = "$"
     private const val COMMAND_CD = "cd"
     private const val OUTPUT_DIRECTORY = "dir"
@@ -53,7 +53,7 @@ object Day7 {
         var root: FileSystemItem.Directory? = null
         var currentDirectory = root
 
-        getResourceAsText("Day7Input").lines().forEach {
+        getInputText().lines().forEach {
             if (it.startsWith(COMMAND_CHARACTER)) {
                 val command = it.removePrefix(COMMAND_CHARACTER).trim()
                 if (command.startsWith(COMMAND_CD)) {

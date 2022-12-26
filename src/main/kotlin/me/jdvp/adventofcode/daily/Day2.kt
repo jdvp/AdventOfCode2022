@@ -1,6 +1,6 @@
 package me.jdvp.adventofcode.daily
 
-import me.jdvp.adventofcode.util.getResourceAsText
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.printResults
 import kotlin.math.abs
 import kotlin.math.min
@@ -9,13 +9,13 @@ import kotlin.math.min
  * This code would be awful to have IRL but is for fun so tried to code golf it a bit which ended up with
  * code that is pretty hard for a human to read straight away
  */
-object Day2 {
+object Day2: Daily(year = 2022, day = 2) {
     private enum class Score(val value: Int) {
         DRAW(3), LOSE(0), WIN(6)
     }
 
     private fun readInput(): List<Pair<Int, Int>> {
-        return getResourceAsText("Day2Input")
+        return getInputText()
             .lines()
             .asSequence()
             .map(String::toCharArray)

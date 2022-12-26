@@ -1,11 +1,11 @@
 package me.jdvp.adventofcode.daily
 
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.NDimensionalArray
-import me.jdvp.adventofcode.util.getResourceAsText
 import me.jdvp.adventofcode.util.printResults
 import me.jdvp.adventofcode.util.toward
 
-object Day14 {
+object Day14: Daily(year = 2022, day = 14) {
     private class RegolithReservoir: NDimensionalArray<Char>(
         dimensions = 2,
         defaultValueCalculation = { '.' }
@@ -51,7 +51,7 @@ object Day14 {
     private fun readInput(): RegolithReservoir {
         val grid = RegolithReservoir()
 
-        getResourceAsText("Day14Input")
+        getInputText()
             .lines()
             .forEach { line ->
                 line.split(" -> ").map { element ->

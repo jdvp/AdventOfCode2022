@@ -1,11 +1,11 @@
 package me.jdvp.adventofcode.daily
 
-import me.jdvp.adventofcode.util.getResourceAsText
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.printResults
 
-object Day8 {
+object Day8: Daily(year = 2022, day = 8) {
     private fun readInput(): List<List<Int>> {
-        return getResourceAsText("Day8Input")
+        return getInputText()
             .lines()
             .map {
                 it.map(Char::digitToInt)

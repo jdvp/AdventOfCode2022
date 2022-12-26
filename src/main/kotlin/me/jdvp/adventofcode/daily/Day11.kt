@@ -1,9 +1,9 @@
 package me.jdvp.adventofcode.daily
 
-import me.jdvp.adventofcode.util.getResourceAsText
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.printResults
 
-object Day11 {
+object Day11: Daily(year = 2022, day = 11) {
     private const val MONKEY_TEST_TEXT = "Test: divisible by "
     private const val MONKEY_OPERATION_TEXT = "Operation: new = old "
     private const val MONKEY_STARTING_ITEMS_TEXT = "Starting items: "
@@ -31,7 +31,7 @@ object Day11 {
     }
 
     private fun getMonkeys(): List<Monkey> {
-        val text = getResourceAsText("Day11Input")
+        val text = getInputText()
 
         val mod = text.getLinesAfter(MONKEY_TEST_TEXT).map(String::toInt).reduce(Int::times)
 

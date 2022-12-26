@@ -1,12 +1,12 @@
 package me.jdvp.adventofcode.daily
 
-import me.jdvp.adventofcode.util.getResourceAsText
+import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.printResults
 import kotlin.math.abs
 
-object Day10 {
+object Day10: Daily(year = 2022, day = 10) {
     private fun readInput(): List<Int> {
-        return getResourceAsText("Day10Input")
+        return getInputText()
             .lines()
             .flatMap { command ->
                 return@flatMap listOf(0) + command.split(" ").run {

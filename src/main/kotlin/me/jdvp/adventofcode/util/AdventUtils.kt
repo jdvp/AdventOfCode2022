@@ -1,11 +1,5 @@
 package me.jdvp.adventofcode.util
 
-import java.io.File
-
-fun getResourceAsText(fileName: String): String {
-    return File("src/main/resources/$fileName").readText()
-}
-
 /**
  * Overly complicated way of printing results as a side effect.
  *
