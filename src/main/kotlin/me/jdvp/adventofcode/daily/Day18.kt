@@ -50,8 +50,8 @@ object Day18: Daily(year = 2022, day = 18) {
             for (y in minY..maxY) {
                 for (z in minZ .. maxZ) {
                     val v = grid[x, y, z]
-                    println("checking $x, $y, $z")
-                    if (v != LAVA_DROPLET && grid.shortestPath(
+                    //println("checking $x, $y, $z")
+                    if (v != LAVA_DROPLET && grid.aStar(
                         start = listOf(x, y, z),
                         end = listOf(minX - 1, minY - 1, minZ - 1),
                         isEdge = { from, to ->

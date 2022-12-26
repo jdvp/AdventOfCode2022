@@ -3,6 +3,7 @@
 package me.jdvp.adventofcode.util
 
 import java.util.*
+import kotlin.math.abs
 
 open class NDimensionalArray<T: Any>(
     protected val dimensions: Int,
@@ -153,6 +154,66 @@ open class NDimensionalArray<T: Any>(
         }
         path.add(0, start)
         return path
+    }
+
+    fun aStar(
+        start: List<Int>,
+        end: List<Int>,
+        isEdge: (T?, T?) -> Boolean = { _, _ ->
+            true
+        },
+        filterUnfilledItems: Boolean = true
+    ): List<List<Int>>? {
+        fun List<Int>.h(): Int {
+            return end.mapIndexed { index, i ->
+                abs(this[index] - i)
+            }.sum()
+        }
+
+        fun Map<List<Int>, List<Int>>.reconstructPath(): List<List<Int>> {
+            var current = end
+            val totalPath = mutableListOf(end)
+            while(current in keys) {
+                current = this[current]!!
+                totalPath.add(current)
+            }
+            return totalPath.reversed()
+        }
+
+        val cameFrom = mutableMapOf<List<Int>, List<Int>>()
+        val gScore = mutableMapOf(
+            start to 0
+        )
+        val fScore = mutableMapOf(
+            start to start.h()
+        )
+        val openSet = PriorityQueue<List<Int>> { a, b ->
+            return@PriorityQueue fScore[a]!! - fScore[b]!!
+        }
+        openSet.add(start)
+
+        while(openSet.isNotEmpty()) {
+            val current = openSet.remove()
+            if (current == end) {
+                return cameFrom.reconstructPath()
+            }
+
+            getNeighborsOf(current, filterUnfilledItems)
+                .filter { isEdge(get(current), get(it)) }
+                .forEach { neighbor ->
+                val tentativeGScore = gScore[current]!! + 1
+                if (tentativeGScore < (gScore[neighbor] ?: Int.MAX_VALUE)) {
+                    cameFrom[neighbor] = current
+                    gScore[neighbor] = tentativeGScore
+                    fScore[neighbor] = tentativeGScore + neighbor.h()
+                    if (neighbor !in openSet) {
+                        openSet.add(neighbor)
+                    }
+                }
+            }
+        }
+
+        return null
     }
 
     fun flipAxes(

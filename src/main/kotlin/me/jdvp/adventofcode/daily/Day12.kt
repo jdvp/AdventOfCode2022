@@ -60,7 +60,7 @@ object Day12: Daily(year = 2022, day = 12) {
         }.first()
 
         return (possibleStartPosition.mapNotNull { startPosition ->
-            grid.shortestPath(
+            grid.aStar(
                 start = startPosition,
                 end = endingPosition,
                 isEdge = ::isEdge
