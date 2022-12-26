@@ -13,7 +13,7 @@ open class NDimensionalArray<T: Any>(
     private fun getMapForDimension(vararg index: Int): MutableMap<Int, Any> {
         var dimension: MutableMap<Int, Any> = topDimension
         for (i in index.dropLast(1)) {
-            dimension = topDimension.getOrPut(i) {
+            dimension = dimension.getOrPut(i) {
                 mutableMapOf<Int, Any>()
             } as MutableMap<Int, Any>
         }
@@ -67,7 +67,7 @@ open class NDimensionalArray<T: Any>(
     }
 
     fun getSatisfyingIndices(
-        predicate: (T) -> Boolean
+        predicate: (T?) -> Boolean
     ): Sequence<List<Int>> {
         return topDimension.getSatisfyingIndices(predicate)
     }
@@ -84,17 +84,17 @@ open class NDimensionalArray<T: Any>(
         )
     }
 
-    private fun getNeighborsOf(
-        index: IntArray
+    fun getNeighborsOf(
+        index: List<Int>
     ): List<List<Int>> {
-        verifyIndexSize(*index)
+        verifyIndexSize(*index.toIntArray())
 
         return (0 until dimensions).reversed().flatMap { dimensionIndex ->
             listOf(
-                index.copyOf().apply {
+                index.toIntArray().copyOf().apply {
                     set(index = dimensionIndex, value = get(dimensionIndex) - 1)
                 },
-                index.copyOf().apply {
+                index.toIntArray().copyOf().apply {
                     set(index = dimensionIndex, value = get(dimensionIndex) + 1)
                 },
             )
@@ -129,7 +129,7 @@ open class NDimensionalArray<T: Any>(
                 foundPath = true
                 break
             }
-            getNeighborsOf(visiting.toIntArray())
+            getNeighborsOf(visiting)
                 .subtract(explored)
                 .filter { isEdge(get(visiting)!!, get(it)!!) }
                 .forEach {
