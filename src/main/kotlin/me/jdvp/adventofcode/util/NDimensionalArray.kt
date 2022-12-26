@@ -85,7 +85,8 @@ open class NDimensionalArray<T: Any>(
     }
 
     fun getNeighborsOf(
-        index: List<Int>
+        index: List<Int>,
+        filterUnfilledItems: Boolean = true
     ): List<List<Int>> {
         verifyIndexSize(*index.toIntArray())
 
@@ -99,7 +100,7 @@ open class NDimensionalArray<T: Any>(
                 },
             )
         }.filterNot {
-            get(*it) == defaultValueCalculation()
+            filterUnfilledItems && get(*it) == defaultValueCalculation()
         }.map { it.toList() }
     }
 
@@ -112,9 +113,10 @@ open class NDimensionalArray<T: Any>(
     fun shortestPath(
         start: List<Int>,
         end: List<Int>,
-        isEdge: (T, T) -> Boolean = { _, _ ->
+        isEdge: (T?, T?) -> Boolean = { _, _ ->
             true
-        }
+        },
+        filterUnfilledItems: Boolean = true
     ): List<List<Int>>? {
         val unvisited = LinkedList<List<Int>>()
         val explored = mutableSetOf(start)
@@ -129,9 +131,9 @@ open class NDimensionalArray<T: Any>(
                 foundPath = true
                 break
             }
-            getNeighborsOf(visiting)
+            getNeighborsOf(visiting, filterUnfilledItems)
                 .subtract(explored)
-                .filter { isEdge(get(visiting)!!, get(it)!!) }
+                .filter { isEdge(get(visiting), get(it)) }
                 .forEach {
                     explored.add(it)
                     parents[it] = visiting

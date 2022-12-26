@@ -29,8 +29,8 @@ object Day12: Daily(year = 2022, day = 12) {
         }
     }
 
-    private fun isEdge(from: Char, to: Char): Boolean {
-        return to.mountainValue() - 1 <= from.mountainValue()
+    private fun isEdge(from: Char?, to: Char?): Boolean {
+        return to!!.mountainValue() - 1 <= from!!.mountainValue()
     }
 
     fun part1(): Int {

@@ -1,7 +1,6 @@
-import me.jdvp.adventofcode.daily.Day1
-import me.jdvp.adventofcode.daily.Day14
+import me.jdvp.adventofcode.daily.Day18
 
 fun main() {
-    Day1.part1()
-    Day1.part2()
+    Day18.part1()
+    Day18.part2()
 }
