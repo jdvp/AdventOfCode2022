@@ -3,6 +3,7 @@ package me.jdvp.adventofcode.daily
 import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.NDimensionalArray
 import me.jdvp.adventofcode.util.printResults
+import kotlin.math.abs
 
 object Day18: Daily(year = 2022, day = 18) {
     private const val LAVA_DROPLET = 18
@@ -46,10 +47,20 @@ object Day18: Daily(year = 2022, day = 18) {
         for(x in minX..maxX) {
             for (y in minY..maxY) {
                 for (z in minZ .. maxZ) {
-                    val v = grid[x, y, z]
+                    val itemIndex = listOf(x, y, z)
+                    val v = grid[itemIndex]
+                    val probableClosestVoid = listOf(
+                        abs(x - (minX - 1)) to listOf(minX - 1, y, z),
+                        abs(x - (maxX + 1)) to listOf(maxX + 1, y, z),
+                        abs(y - (minY - 1)) to listOf(x, minY - 1, z),
+                        abs(y - (maxY + 1)) to listOf(x, maxY + 1, z),
+                        abs(z - (minZ - 1)) to listOf(x, y, minZ - 1),
+                        abs(z - (maxZ + 1)) to listOf(x, y, maxZ + 1)
+                    ).minBy { it.first }.second
+
                     if (v != LAVA_DROPLET && grid.shortestPath(
                         start = listOf(x, y, z),
-                        end = listOf(minX - 1, y, z), //just somewhere in the 'void'
+                        end = probableClosestVoid, //just somewhere in the 'void'
                         isEdge = { from, to ->
                             from != LAVA_DROPLET && to != LAVA_DROPLET
                         },
