@@ -29,3 +29,8 @@ inline fun <reified T> T.printResults(
     val newLineChar = if (startOnNewLine) "\n" else ""
     println("$enclosingClass $enclosingMethod result is $newLineChar$this")
 }
+
+infix fun Int.toward(to: Int): IntProgression {
+    val step = if (this > to) -1 else 1
+    return IntProgression.fromClosedRange(this, to, step)
+}

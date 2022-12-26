@@ -54,7 +54,7 @@ object Day12 {
         val grid = readInput()
         val possibleStartPosition = grid.getSatisfyingIndices {
             it == CHARACTER_START || it == CHARACTER_ELEVATION_LOWEST
-        }
+        }.toList()
         val endingPosition = grid.getSatisfyingIndices {
             it == CHARACTER_END
         }.first()

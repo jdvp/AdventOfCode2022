@@ -4,9 +4,9 @@ package me.jdvp.adventofcode.util
 
 import java.util.*
 
-class NDimensionalArray<T: Any>(
-    private val dimensions: Int = 2,
-    private val defaultValueCalculation: () -> T?
+open class NDimensionalArray<T: Any>(
+    protected val dimensions: Int,
+    protected val defaultValueCalculation: () -> T? = { null }
 ) {
     private val topDimension = mutableMapOf<Int, Any>()
 
@@ -20,21 +20,38 @@ class NDimensionalArray<T: Any>(
         return dimension
     }
 
-    operator fun set(vararg index: Int, value: T) {
+    open operator fun set(vararg index: Int, value: T) {
         verifyIndexSize(*index)
         getMapForDimension(*index)[index.last()] = value
     }
 
-    operator fun get(vararg index: Int): T? {
+    open operator fun set(index: List<Int>, value: T) {
+        set(*index.toIntArray(), value = value)
+    }
+
+    open operator fun get(vararg index: Int): T? {
         verifyIndexSize(*index)
         return getMapForDimension(*index)[index.last()] as? T? ?: defaultValueCalculation()
+    }
+
+    open operator fun get(index: List<Int>): T? {
+        return get(*index.toIntArray())
+    }
+
+    open fun clearItem(vararg index: Int) {
+        verifyIndexSize(*index)
+        getMapForDimension(*index).remove(index.last())
+    }
+
+    open fun clearItem(index: List<Int>) {
+        clearItem(*index.toIntArray())
     }
 
     private fun Map<Int, Any>.getSatisfyingIndices(
         predicate: (T) -> Boolean,
         priorIndices: List<Int> = listOf()
-    ): List<List<Int>> {
-        return entries.flatMap { entry ->
+    ): Sequence<List<Int>> {
+        return entries.asSequence().flatMap { entry ->
             val value = entry.value
             if (value is Map<*, *>) {
                 return@flatMap (value as Map<Int, Any>).getSatisfyingIndices(
@@ -42,16 +59,16 @@ class NDimensionalArray<T: Any>(
                     priorIndices = priorIndices + entry.key
                 )
             } else if (predicate(value as T)) {
-                return@flatMap listOf(priorIndices + entry.key)
+                return@flatMap sequenceOf(priorIndices + entry.key)
             }
 
-            return@flatMap listOf()
+            return@flatMap sequenceOf()
         }.filterNot { it.isEmpty() }
     }
 
     fun getSatisfyingIndices(
         predicate: (T) -> Boolean
-    ): List<List<Int>> {
+    ): Sequence<List<Int>> {
         return topDimension.getSatisfyingIndices(predicate)
     }
 
@@ -61,13 +78,15 @@ class NDimensionalArray<T: Any>(
         return (0..maxLength).map {
             this?.get(it) ?: defaultValueCalculation()
         }.joinToString(
-            separator = ", ",
+            separator = "",
             prefix = "[",
             postfix = "]"
         )
     }
 
-    private fun getNeighborsOf(index: IntArray): List<List<Int>> {
+    private fun getNeighborsOf(
+        index: IntArray
+    ): List<List<Int>> {
         verifyIndexSize(*index)
 
         return (0 until dimensions).reversed().flatMap { dimensionIndex ->
@@ -112,7 +131,7 @@ class NDimensionalArray<T: Any>(
             }
             getNeighborsOf(visiting.toIntArray())
                 .subtract(explored)
-                .filter { isEdge(get(*visiting.toIntArray())!!, get(*it.toIntArray())!!) }
+                .filter { isEdge(get(visiting)!!, get(it)!!) }
                 .forEach {
                     explored.add(it)
                     parents[it] = visiting
@@ -134,6 +153,24 @@ class NDimensionalArray<T: Any>(
         return path
     }
 
+    fun flipAxes(
+        shiftAxes: List<Int>? = null
+    ): NDimensionalArray<T>{
+        val newArray = NDimensionalArray(
+            dimensions = dimensions,
+            defaultValueCalculation = defaultValueCalculation
+        )
+        getSatisfyingIndices {
+            it != defaultValueCalculation()
+        }.forEach { oldIndex ->
+            val newIndex = oldIndex.mapIndexed { index, i ->
+                i + (shiftAxes?.getOrNull(index) ?: 0)
+            }.reversed()
+            newArray[newIndex] = this[oldIndex]!!
+        }
+        return newArray
+    }
+
     fun print() {
         when (dimensions) {
             1 -> {
@@ -144,7 +181,7 @@ class NDimensionalArray<T: Any>(
             2 -> {
                 val xMax = topDimension.keys.sorted().max()
                 val yMax = (0..xMax).maxOf {
-                    (topDimension[it] as? Map<Int, *>)?.keys?.sorted()?.max() ?: 0
+                    (topDimension[it] as? Map<Int, *>)?.keys?.sorted()?.maxOrNull() ?: 0
                 }
 
                 (0..xMax).joinToString(
