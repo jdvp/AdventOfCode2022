@@ -111,6 +111,10 @@ open class NDimensionalArray<T: Any>(
         }
     }
 
+    /**
+     * Finds the shortest path leveraging the A* algorithm (unless I coded it wrong LOL).
+     * The heuristic used is just a simple Manhattan distance.
+     */
     fun shortestPath(
         start: List<Int>,
         end: List<Int>,
@@ -119,62 +123,18 @@ open class NDimensionalArray<T: Any>(
         },
         filterUnfilledItems: Boolean = true
     ): List<List<Int>>? {
-        val unvisited = LinkedList<List<Int>>()
-        val explored = mutableSetOf(start)
-        val parents = mutableMapOf<List<Int>, List<Int>>()
-        unvisited.add(start)
-
-        var foundPath = false
-
-        while (unvisited.isNotEmpty()) {
-            val visiting = unvisited.remove()
-            if (visiting == end.toList()) {
-                foundPath = true
-                break
-            }
-            getNeighborsOf(visiting, filterUnfilledItems)
-                .subtract(explored)
-                .filter { isEdge(get(visiting), get(it)) }
-                .forEach {
-                    explored.add(it)
-                    parents[it] = visiting
-                    unvisited.add(it)
-                }
-        }
-
-        if (!foundPath) {
-            return null
-        }
-
-        val path = mutableListOf<List<Int>>()
-        var node: List<Int> = end
-        while(node != start) {
-            path.add(0, node)
-            node = parents[node] ?: return null
-        }
-        path.add(0, start)
-        return path
-    }
-
-    fun aStar(
-        start: List<Int>,
-        end: List<Int>,
-        isEdge: (T?, T?) -> Boolean = { _, _ ->
-            true
-        },
-        filterUnfilledItems: Boolean = true
-    ): List<List<Int>>? {
         fun List<Int>.h(): Int {
+            //just using manhattan distance for heuristic
             return end.mapIndexed { index, i ->
                 abs(this[index] - i)
             }.sum()
         }
 
-        fun Map<List<Int>, List<Int>>.reconstructPath(): List<List<Int>> {
+        fun Map<List<Int>, List<Int>>.reconstructPath(): List<List<Int>>? {
             var current = end
             val totalPath = mutableListOf(end)
             while(current in keys) {
-                current = this[current]!!
+                current = this[current] ?: return null
                 totalPath.add(current)
             }
             return totalPath.reversed()
@@ -188,7 +148,7 @@ open class NDimensionalArray<T: Any>(
             start to start.h()
         )
         val openSet = PriorityQueue<List<Int>> { a, b ->
-            return@PriorityQueue fScore[a]!! - fScore[b]!!
+            return@PriorityQueue (fScore[a] ?: Int.MAX_VALUE) - (fScore[b] ?: Int.MAX_VALUE)
         }
         openSet.add(start)
 

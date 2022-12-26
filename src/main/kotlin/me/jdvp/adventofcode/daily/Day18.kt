@@ -3,9 +3,6 @@ package me.jdvp.adventofcode.daily
 import me.jdvp.adventofcode.util.Daily
 import me.jdvp.adventofcode.util.NDimensionalArray
 import me.jdvp.adventofcode.util.printResults
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 object Day18: Daily(year = 2022, day = 18) {
     private const val LAVA_DROPLET = 18
@@ -50,16 +47,14 @@ object Day18: Daily(year = 2022, day = 18) {
             for (y in minY..maxY) {
                 for (z in minZ .. maxZ) {
                     val v = grid[x, y, z]
-                    //println("checking $x, $y, $z")
-                    if (v != LAVA_DROPLET && grid.aStar(
+                    if (v != LAVA_DROPLET && grid.shortestPath(
                         start = listOf(x, y, z),
-                        end = listOf(minX - 1, minY - 1, minZ - 1),
+                        end = listOf(minX - 1, y, z), //just somewhere in the 'void'
                         isEdge = { from, to ->
                             from != LAVA_DROPLET && to != LAVA_DROPLET
                         },
                         filterUnfilledItems = false
                     ) == null) {
-                        println("FILLED $x, $y, $z")
                         grid[x, y, z] = LAVA_DROPLET
                     }
                 }
